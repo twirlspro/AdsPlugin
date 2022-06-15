@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:tools="http://schemas.android.com/tools">
+
+	<androidManifestUpdates>
+		<addPermission android:name="android.permission.INTERNET" />
+		<addPermission android:name="com.android.vending.BILLING" />
+	</androidManifestUpdates>
+
+	<AARImports>
+		<insertValue value="com.google.android.gms,play-services-ads,11.8.0"/>
+		<insertNewline/>
+	</AARImports>
+
+	<buildGradleAdditions>
+		<insert>
+			android
+			{
+				compileOptions
+				{
+					targetCompatibility JavaVersion.VERSION_1_8
+					sourceCompatibility JavaVersion.VERSION_1_8
+				}
+			}
+		</insert>
+	</buildGradleAdditions>
+
+	<gameActivityImportAdditions>
+		<insert>
+			import com.google.android.gms.ads.AdRequest;
+			import com.google.android.gms.ads.InterstitialAd;
+			import com.google.android.gms.ads.MobileAds;
+		</insert>
+	</gameActivityImportAdditions>
+
+	<gameActivityOnCreateAdditions>
+		<insert>
+			//nir01 (search tag)
+			MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
+			InitAds();
+		</insert>
+	</gameActivityOnCreateAdditions>
+
+	<gameActivityClassAdditions>
+		<insert>
+			//nir01 (search tag)
+			private InterstitialAd interstitialAd;
+
+			public void InitAds(){
+				interstitialAd = new InterstitialAd(this);
+				interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+				interstitialAd.loadAd(new AdRequest.Builder().addTestDevice("D11123E2049EE9FF2D0F5B3B6D8EDEA4").build());
+			}
+
+			public void ShowAds(){
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						interstitialAd.show();
+					}
+				});
+			}
+		</insert>
+	</gameActivityClassAdditions>
+
+</root>
