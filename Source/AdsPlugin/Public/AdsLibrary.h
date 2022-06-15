@@ -13,7 +13,14 @@ class ADSPLUGIN_API UAdsLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
+	static void ShowAdBanner();
+	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
+	static void ShowInterstitialAd();
+	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
+	static void ShowRewardedAd();
 	
-	UFUNCTION(BlueprintCallable, Category = "Android")
-	static bool CallJavaGameActivity(FString MethodName, bool bIsOptional);
+private:
+	static void CallJavaMethod(const ANSICHAR* MethodName);
+	
 };

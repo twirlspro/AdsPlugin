@@ -7,20 +7,32 @@
 #include "Android/AndroidJNI.h"
 #endif
 
-bool UAdsLibrary::CallJavaGameActivity(FString MethodName, bool bIsOptional)
+void UAdsLibrary::ShowAdBanner()
 {
-#if PLATFORM_ANDROID
+	CallJavaMethod("showAdBanner");
+}
+
+void UAdsLibrary::ShowInterstitialAd()
+{
+	CallJavaMethod("showInterstitialAd");
+}
+
+void UAdsLibrary::ShowRewardedAd()
+{
+	CallJavaMethod("showRewardedAd");
+}
+
+void UAdsLibrary::CallJavaMethod(const ANSICHAR* MethodName)
+{
+#if PLATFORM_ANDROID && USE_ANDROID_JNI
 	if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
 	{
-		const bool bIsOptional;
-		const jmethodID Method = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, TCHAR_TO_ANSI(*MethodName), "()V", bIsOptional);
+		const jmethodID Method = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, MethodName, "()V", false);
 
 		if (Method != nullptr)
 		{
-			FJavaWrapper::CallVoidMethod(Env, FJavaWrapper::GameActivityThis, JMethod);
-			return true;
+			FJavaWrapper::CallVoidMethod(Env, FJavaWrapper::GameActivityThis, Method);
 		}
 	}
 #endif
-	return false;
 }
