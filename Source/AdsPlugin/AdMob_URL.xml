@@ -13,6 +13,19 @@
 		<insertNewline/>
 	</AARImports>
 
+	<prebuildCopies>
+		<copyDir src="$S(PluginDir)/Private/Java" dst="$S(BuildDir)/src/com/Plugins/AdsPlugin" />
+	</prebuildCopies>
+
+	<proguardAdditions>
+		<insert>
+		  -dontwarn com.Plugins.**
+		  -keep class com.Plugins.** { *; }
+		  -keep interface com.Plugins.** { *; }
+		  -keep public class com.Plugins.AdsPlugin.** { public protected *; }
+		</insert>
+	</proguardAdditions>
+
 	<buildGradleAdditions>
 		<insert>
 			android
@@ -31,6 +44,8 @@
 			import com.google.android.gms.ads.AdRequest;
 			import com.google.android.gms.ads.InterstitialAd;
 			import com.google.android.gms.ads.MobileAds;
+
+			import com.Plugins.AdsPlugin.UAdMob;
 		</insert>
 	</gameActivityImportAdditions>
 
@@ -44,31 +59,6 @@
 
 	<gameActivityClassAdditions>
 		<insert>
-			//nir01 (search tag)
-			private InterstitialAd interstitialAd;
-
-			public static native void OnSuccessAd(boolean IsSuccess);
-
-			public void InitAds(){
-				interstitialAd = new InterstitialAd(this);
-				interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-				interstitialAd.loadAd(new AdRequest.Builder().addTestDevice("D11123E2049EE9FF2D0F5B3B6D8EDEA4").build());
-			}
-
-			public void showInterstitialAd(){
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						if (interstitialAd.isLoaded()){
-							interstitialAd.show();
-							OnSuccessAd(true);
-						} else {
-							OnSuccessAd(false);
-							InitAds();
-						}
-					}
-				});
-			}
 		</insert>
 	</gameActivityClassAdditions>
 

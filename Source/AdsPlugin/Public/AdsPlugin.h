@@ -5,6 +5,14 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+UENUM(BlueprintType)
+enum class EAdType : uint8
+{
+	Banner,
+	Interstitial,
+	RewardedVideo,
+};
+
 class FAdsPluginModule : public IModuleInterface
 {
 public:

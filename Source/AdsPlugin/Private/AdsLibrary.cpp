@@ -7,19 +7,14 @@
 #include "Android/AndroidJNI.h"
 #endif
 
-void UAdsLibrary::ShowAdBanner()
+void UAdsLibrary::LoadAd(EAdsType Type)
 {
-	CallJavaMethod("showAdBanner");
+	CallJavaMethod("JavaLoadAd");
 }
 
-void UAdsLibrary::ShowInterstitialAd()
+void UAdsLibrary::IsAdLoaded(EAdsType Type, bool& isLoaded)
 {
-	CallJavaMethod("showInterstitialAd");
-}
-
-void UAdsLibrary::ShowRewardedAd()
-{
-	CallJavaMethod("showRewardedAd");
+	CallJavaMethod("JavaIsAdLoaded");
 }
 
 void UAdsLibrary::CallJavaMethod(const ANSICHAR* MethodName)

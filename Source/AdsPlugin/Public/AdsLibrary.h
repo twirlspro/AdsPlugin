@@ -7,6 +7,16 @@
 
 #include "AdsLibrary.generated.h"
 
+//enam ads type
+UENUM(BlueprintType)
+enum class EAdsType : uint8
+{
+	Banner,
+	Interstitial,
+	RewardedVideo,
+	NativeAds
+};
+
 UCLASS()
 class ADSPLUGIN_API UAdsLibrary : public UBlueprintFunctionLibrary
 {
@@ -14,13 +24,11 @@ class ADSPLUGIN_API UAdsLibrary : public UBlueprintFunctionLibrary
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
-	static void ShowAdBanner();
-	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
-	static void ShowInterstitialAd();
-	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
-	static void ShowRewardedAd();
+	static void LoadAd(EAdsType Type);
 	
-private:
+	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
+	static void IsAdLoaded(EAdsType Type, bool& isLoaded);
+	
 	static void CallJavaMethod(const ANSICHAR* MethodName);
 	
 };
