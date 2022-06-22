@@ -76,6 +76,19 @@ import com.google.android.gms.ads.MobileAds;
 		});
 	}
 
+	public boolean isLoad = false;
+	public boolean IsAdLoaded(){
+		if(interstitialAd != null){
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					isLoad = interstitialAd.isLoaded();
+				}
+			});
+		}
+		return isLoad;
+	}
+
 	public void javaShowAd(){
 		runOnUiThread(new Runnable() {
 			@Override

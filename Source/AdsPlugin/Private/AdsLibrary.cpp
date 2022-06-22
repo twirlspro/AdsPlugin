@@ -7,14 +7,20 @@
 #include "Android/AndroidJNI.h"
 #endif
 
-void UAdsLibrary::LoadAd(EAdsType Type)
+bool UAdsLibrary::IsAdLoaded(EAdType Type)
 {
-	CallJavaMethod("JavaLoadAd");
-}
+#if PLATFORM_ANDROID && USE_ANDROID_JNI
+	if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
+	{
+		const jmethodID Method = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, "IsAdLoaded", "()Z", false);
 
-void UAdsLibrary::IsAdLoaded(EAdsType Type, bool& isLoaded)
-{
-	CallJavaMethod("JavaIsAdLoaded");
+		if (Method != nullptr)
+		{
+			return FJavaWrapper::CallBooleanMethod(Env, FJavaWrapper::GameActivityThis, Method);
+		}
+	}
+#endif
+	return false;
 }
 
 void UAdsLibrary::CallJavaMethod(const ANSICHAR* MethodName)

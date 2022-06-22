@@ -4,18 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-
+#include "AdsPlugin.h"
 #include "AdsLibrary.generated.h"
-
-//enam ads type
-UENUM(BlueprintType)
-enum class EAdsType : uint8
-{
-	Banner,
-	Interstitial,
-	RewardedVideo,
-	NativeAds
-};
 
 UCLASS()
 class ADSPLUGIN_API UAdsLibrary : public UBlueprintFunctionLibrary
@@ -23,11 +13,9 @@ class ADSPLUGIN_API UAdsLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
-	static void LoadAd(EAdsType Type);
 	
-	UFUNCTION(BlueprintCallable, Category = "Ads|AdMob")
-	static void IsAdLoaded(EAdsType Type, bool& isLoaded);
+	UFUNCTION(BlueprintPure, Category = "Ads|AdMob")
+	static bool IsAdLoaded(EAdType Type);
 	
 	static void CallJavaMethod(const ANSICHAR* MethodName);
 	
