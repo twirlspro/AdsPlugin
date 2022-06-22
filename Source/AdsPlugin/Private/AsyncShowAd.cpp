@@ -13,14 +13,13 @@ UAsyncShowAd* ShowProxy;
 
 UAsyncShowAd * UAsyncShowAd::ShowAd(EAdType AdType)
 {
-    UAsyncShowAd* Instance = NewObject<UAsyncShowAd>();
-    return Instance;
+	UAsyncShowAd* Instance = NewObject<UAsyncShowAd>();
+	return Instance;
 }
 
 void UAsyncShowAd::Activate()
 {
-    ShowProxy = this;
-}
+	ShowProxy = this;
 
 #if PLATFORM_ANDROID && USE_ANDROID_JNI
 if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
@@ -33,11 +32,12 @@ if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
 	}
 }
 #endif
+}
 
 #if PLATFORM_ANDROID && USE_ANDROID_JNI
 JNI_METHOD void Java_com_epicgames_ue4_GameActivity_OnShowSuccess(JNIEnv* jenv, jclass clazz)
 {
-	if (Proxy != nullptr)
+	if (ShowProxy != nullptr)
 	{
 		AsyncTask(ENamedThreads::GameThread, [=]() { ShowProxy->OnSuccess.Broadcast(); });
 	}
@@ -47,7 +47,7 @@ JNI_METHOD void Java_com_epicgames_ue4_GameActivity_OnShowSuccess(JNIEnv* jenv, 
 #if PLATFORM_ANDROID && USE_ANDROID_JNI
 JNI_METHOD void Java_com_epicgames_ue4_GameActivity_OnShowFailed(JNIEnv* jenv, jclass clazz)
 {
-	if (Proxy != nullptr)
+	if (ShowProxy != nullptr)
 	{
 		AsyncTask(ENamedThreads::GameThread, [=]() { ShowProxy->OnFailed.Broadcast(); });
 	}

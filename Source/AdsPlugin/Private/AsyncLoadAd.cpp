@@ -19,7 +19,6 @@ UAsyncLoadAd* UAsyncLoadAd::LoadAd(EAdType AdType)
 void UAsyncLoadAd::Activate()
 {
 	LoadProxy = this;
-}
 
 #if PLATFORM_ANDROID && USE_ANDROID_JNI
 if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
@@ -32,11 +31,12 @@ if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
 	}
 }
 #endif
+}
 
 #if PLATFORM_ANDROID && USE_ANDROID_JNI
 JNI_METHOD void Java_com_epicgames_ue4_GameActivity_OnLoadSuccess(JNIEnv* jenv, jclass clazz)
 {
-	if (Proxy != nullptr)
+	if (LoadProxy != nullptr)
 	{
 		AsyncTask(ENamedThreads::GameThread, [=]() { LoadProxy->OnSuccess.Broadcast(); });
 	}
@@ -46,7 +46,7 @@ JNI_METHOD void Java_com_epicgames_ue4_GameActivity_OnLoadSuccess(JNIEnv* jenv, 
 #if PLATFORM_ANDROID && USE_ANDROID_JNI
 JNI_METHOD void Java_com_epicgames_ue4_GameActivity_OnLoadFailed(JNIEnv* jenv, jclass clazz)
 {
-	if (Proxy != nullptr)
+	if (LoadProxy != nullptr)
 	{
 		AsyncTask(ENamedThreads::GameThread, [=]() { LoadProxy->OnFailed.Broadcast(); });
 	}

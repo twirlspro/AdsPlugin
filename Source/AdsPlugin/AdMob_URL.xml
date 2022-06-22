@@ -13,19 +13,6 @@
 		<insertNewline/>
 	</AARImports>
 
-	<prebuildCopies>
-		<copyDir src="$S(PluginDir)/Private/Java" dst="$S(BuildDir)/src/com/Plugins/AdsPlugin" />
-	</prebuildCopies>
-
-	<proguardAdditions>
-		<insert>
-		  -dontwarn com.Plugins.**
-		  -keep class com.Plugins.** { *; }
-		  -keep interface com.Plugins.** { *; }
-		  -keep public class com.Plugins.AdsPlugin.** { public protected *; }
-		</insert>
-	</proguardAdditions>
-
 	<buildGradleAdditions>
 		<insert>
 			android
@@ -41,17 +28,15 @@
 
 	<gameActivityImportAdditions>
 		<insert>
-			import com.google.android.gms.ads.AdRequest;
-			import com.google.android.gms.ads.InterstitialAd;
-			import com.google.android.gms.ads.MobileAds;
-
-			import com.Plugins.AdsPlugin.UAdMob;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 		</insert>
 	</gameActivityImportAdditions>
 
 	<gameActivityOnCreateAdditions>
 		<insert>
-			//nir01 (search tag)
+			//nirilon (search tag)
 			MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 			InitAds();
 		</insert>
@@ -59,6 +44,34 @@
 
 	<gameActivityClassAdditions>
 		<insert>
+		//nirilon (search tag)
+		private InterstitialAd interstitialAd;
+
+		public static native void OnLoadSuccess();
+		public static native void OnLoadFailed();
+		public static native void OnShowSuccess();
+		public static native void OnShowFailed();
+
+		public void javaLoadAd(){
+			interstitialAd = new InterstitialAd(this);
+			interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+			interstitialAd.loadAd(new AdRequest.Builder().addTestDevice("D11123E2049EE9FF2D0F5B3B6D8EDEA4").build());
+		}
+
+		public void javaShowAd(){
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (interstitialAd.isLoaded()){
+						interstitialAd.show();
+						OnShowSuccess();
+					} else {
+						OnShowFailed();
+						InitAds();
+					}
+				}
+			});
+		}
 		</insert>
 	</gameActivityClassAdditions>
 
