@@ -29,6 +29,7 @@
 	<gameActivityImportAdditions>
 		<insert>
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 		</insert>
@@ -36,42 +37,58 @@ import com.google.android.gms.ads.MobileAds;
 
 	<gameActivityOnCreateAdditions>
 		<insert>
-			//nirilon (search tag)
-			MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
-			InitAds();
+		//nir01 (search tag)
+		MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
 		</insert>
 	</gameActivityOnCreateAdditions>
 
 	<gameActivityClassAdditions>
 		<insert>
-		//nirilon (search tag)
-		private InterstitialAd interstitialAd;
+	//nir01 (search tag)
+	private InterstitialAd interstitialAd;
 
-		public static native void OnLoadSuccess();
-		public static native void OnLoadFailed();
-		public static native void OnShowSuccess();
-		public static native void OnShowFailed();
+	public static native void OnLoadSuccess();
+	public static native void OnLoadFailed();
+	public static native void OnShowSuccess();
+	public static native void OnShowFailed();
 
-		public void javaLoadAd(){
-			interstitialAd = new InterstitialAd(this);
-			interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-			interstitialAd.loadAd(new AdRequest.Builder().addTestDevice("D11123E2049EE9FF2D0F5B3B6D8EDEA4").build());
-		}
+	public void javaLoadAd(){
+		interstitialAd = new InterstitialAd(this);
+		interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				interstitialAd.loadAd(new AdRequest.Builder().addTestDevice("D11123E2049EE9FF2D0F5B3B6D8EDEA4").build());
+			}
+		});
 
-		public void javaShowAd(){
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					if (interstitialAd.isLoaded()){
-						interstitialAd.show();
-						OnShowSuccess();
-					} else {
-						OnShowFailed();
-						InitAds();
-					}
+		interstitialAd.setAdListener(new AdListener()
+		{
+			@Override
+			public void onAdFailedToLoad(int errorCode){
+				Log.debug("Interstitial Ad failed to load, errocode: " + errorCode);
+				OnLoadFailed();
+			}
+			@Override
+			public void onAdLoaded(){
+				OnLoadSuccess();
+			}
+		});
+	}
+
+	public void javaShowAd(){
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (interstitialAd.isLoaded()){
+					interstitialAd.show();
+					OnShowSuccess();
+				} else {
+					OnShowFailed();
 				}
-			});
-		}
+			}
+		});
+	}
 		</insert>
 	</gameActivityClassAdditions>
 
